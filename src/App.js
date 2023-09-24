@@ -13,17 +13,19 @@ export default function Board() {
   const [xIsNext, setXIsNext] = useState(true); 
   const [squares, setSquares] = useState(Array(9).fill(null));
 
-  function handleClick(squareIndex) {
+  function handleClick(squaresIndex) {
+    if (squares[squaresIndex] || calculateWinner(squares)) {
+      return;
+    }
     const nextSquares = squares.slice();
     if (xIsNext) {
-      nextSquares[squareIndex] = "X";
+      nextSquares[squaresIndex] = "X";
     } else {
-      nextSquares[squareIndex] = "O";
+      nextSquares[squaresIndex] = "O";
     }
     setSquares(nextSquares);
     setXIsNext(!xIsNext);
   }
-
 
   return (
     <React.Fragment>
@@ -44,4 +46,24 @@ export default function Board() {
       </div>
     </React.Fragment>
   );
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let lineToCompareTo = 0; lineToCompareTo < lines.length; lineToCompareTo++) {
+    const [firstSquaresIndexInLineToCompareTo, secondSquaresIndexInLineToCompareTo, thirdSquaresIndexInLineToCompareTo] = lines[lineToCompareTo];
+    if (squares[firstSquaresIndexInLineToCompareTo] && squares[firstSquaresIndexInLineToCompareTo] === squares[secondSquaresIndexInLineToCompareTo] && squares[firstSquaresIndexInLineToCompareTo] === squares[thirdSquaresIndexInLineToCompareTo]) {
+      return squares[firstSquaresIndexInLineToCompareTo];
+    }
+  }
+  return null;
+}
 }
