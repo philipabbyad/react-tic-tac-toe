@@ -27,8 +27,17 @@ export default function Board() {
     setXIsNext(!xIsNext);
   }
 
+  const gameWinner = calculateWinner(squares);
+  let gameStatus;
+  if (gameWinner) {
+    gameStatus = "Winner: " + gameWinner;
+  } else {
+    gameStatus = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
   return (
     <React.Fragment>
+      <div className="gameStatus">{gameStatus}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
